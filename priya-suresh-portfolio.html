@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Priya Suresh — Backend Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b0e11; --surface:#12161b; --line:#232933; --ink:#e8ecef; --muted:#8a94a3;
+  --accent:#6ee7c0; --accent2:#7aa2f7; color-scheme:dark;
+}
+[data-theme="light"]{
+  --bg:#f7f7f5; --surface:#ffffff; --line:#e3e1da; --ink:#17191c; --muted:#5c6066;
+  --accent:#0f8f6b; --accent2:#2d5fcc; color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,sans-serif;line-height:1.65;transition:background .3s,color .3s}
+.mono{font-family:"JetBrains Mono",ui-monospace,monospace}
+.wrap{max-width:860px;margin:0 auto;padding:0 24px}
+a{color:var(--accent)}
+#bgcanvas{position:fixed;inset:0;z-index:0;opacity:.5;pointer-events:none}
+
+header.top{position:sticky;top:0;z-index:5;backdrop-filter:blur(8px);background:color-mix(in srgb, var(--bg) 85%, transparent);border-bottom:1px solid var(--line)}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;max-width:860px;margin:0 auto}
+.topbar .name{font-family:"JetBrains Mono";font-weight:700;font-size:15px}
+.topbar .links{display:flex;gap:18px;align-items:center}
+.topbar a{color:var(--muted);text-decoration:none;font-size:13.5px}
+.topbar a:hover{color:var(--accent)}
+.themebtn{background:var(--surface);border:1px solid var(--line);color:var(--ink);border-radius:20px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:"JetBrains Mono"}
+
+.hero{position:relative;z-index:1;padding:90px 0 70px}
+.hero .prompt{color:var(--accent);font-size:13.5px;margin-bottom:10px}
+.hero h1{font-size:clamp(32px,6vw,54px);margin:0 0 6px;font-weight:700;letter-spacing:-0.02em}
+.hero .typed{color:var(--accent2);font-family:"JetBrains Mono";font-size:clamp(15px,2.4vw,20px);min-height:28px}
+.hero .typed::after{content:"▍";animation:blink 1s step-end infinite;color:var(--accent)}
+@keyframes blink{50%{opacity:0}}
+.hero p.lede{max-width:56ch;color:var(--muted);margin:22px 0 0;font-size:16px}
+.hero .ctas{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
+.btn{padding:10px 20px;border-radius:6px;font-size:14px;font-weight:600;text-decoration:none;cursor:pointer;border:1px solid var(--line)}
+.btn.primary{background:var(--accent);color:#06130e;border-color:var(--accent)}
+.btn.ghost{color:var(--ink)}
+
+section{position:relative;z-index:1;padding:56px 0;border-top:1px solid var(--line)}
+section h2{font-family:"JetBrains Mono";font-size:13px;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;margin:0 0 28px}
+.fade{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+.fade.in{opacity:1;transform:translateY(0)}
+
+.timeline{border-left:2px solid var(--line);padding-left:24px;position:relative}
+.titem{margin-bottom:30px;position:relative}
+.titem::before{content:"";position:absolute;left:-30px;top:4px;width:10px;height:10px;border-radius:50%;background:var(--accent)}
+.titem .role{font-weight:600;font-size:16px}
+.titem .meta{color:var(--muted);font-size:13px;font-family:"JetBrains Mono";margin:2px 0 8px}
+.titem p{color:var(--muted);font-size:14.5px;margin:4px 0}
+
+.skillgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:18px}
+.skill{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px}
+.skill .label{display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px}
+.skill .label span:last-child{color:var(--muted);font-family:"JetBrains Mono"}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));width:0;transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
+
+.projgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+.proj{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:20px;transition:transform .2s,border-color .2s}
+.proj:hover{transform:translateY(-3px);border-color:var(--accent)}
+.proj h3{margin:0 0 8px;font-size:15.5px;font-family:"JetBrains Mono"}
+.proj p{color:var(--muted);font-size:13.5px;margin:0 0 12px}
+.proj .tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:11px;font-family:"JetBrains Mono";background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:2px 7px;color:var(--muted)}
+
+.contact-grid{display:flex;gap:16px;flex-wrap:wrap}
+.contact-card{flex:1;min-width:180px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:18px;text-decoration:none;color:var(--ink)}
+.contact-card:hover{border-color:var(--accent)}
+.contact-card .k{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-family:"JetBrains Mono"}
+.contact-card .v{margin-top:4px;font-size:14px;font-weight:600}
+
+footer{position:relative;z-index:1;padding:36px 0;text-align:center;color:var(--muted);font-size:12.5px;font-family:"JetBrains Mono"}
+</style>
+</head>
+<body>
+<canvas id="bgcanvas"></canvas>
+
+<header class="top">
+  <div class="topbar">
+    <div class="name mono">priya@suresh:~$</div>
+    <div class="links">
+      <a href="#experience">experience</a>
+      <a href="#skills">skills</a>
+      <a href="#projects">projects</a>
+      <a href="#contact">contact</a>
+      <button class="themebtn" id="themeBtn">☾ dark</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <section class="hero">
+    <p class="prompt mono">$ whoami</p>
+    <h1>Priya Suresh</h1>
+    <div class="typed mono" id="typed"></div>
+    <p class="lede">I build the unglamorous parts of monitoring systems — ingestion, alert routing, and the plumbing that decides what wakes someone up at 3am. Currently on the platform team at LiveCorp.</p>
+    <div class="ctas">
+      <a class="btn primary" href="#projects">See projects</a>
+      <a class="btn ghost" href="#contact">Get in touch</a>
+    </div>
+  </section>
+
+  <section id="experience">
+    <h2>// experience</h2>
+    <div class="timeline fade">
+      <div class="titem">
+        <div class="role">Backend Engineer — LiveCorp (platform team)</div>
+        <div class="meta">2021 — present · Austin, TX</div>
+        <p>Own core services in the detection pipeline: event ingestion, normalization, and alert routing. Rotate through on-call and have led incident response on a handful of priority alerting issues.</p>
+      </div>
+      <div class="titem">
+        <div class="role">Associate Backend Engineer — LiveCorp</div>
+        <div class="meta">2019 — 2021 · Austin, TX</div>
+        <p>Joined part-time while finishing my degree, converted to full-time after graduation. Built internal dashboards and helped migrate off a legacy alerting stack that paged people way too often.</p>
+      </div>
+      <div class="titem">
+        <div class="role">Software Engineering Intern — Civitas Data Systems</div>
+        <div class="meta">Summer 2018 · Dallas, TX</div>
+        <p>First real exposure to production on-call. Built reporting tools for a logistics client on a small internal team.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <h2>// skills</h2>
+    <div class="skillgrid fade">
+      <div class="skill"><div class="label"><span>Python</span><span>92%</span></div><div class="bar"><i data-w="92"></i></div></div>
+      <div class="skill"><div class="label"><span>Go</span><span>78%</span></div><div class="bar"><i data-w="78"></i></div></div>
+      <div class="skill"><div class="label"><span>Distributed Systems</span><span>85%</span></div><div class="bar"><i data-w="85"></i></div></div>
+      <div class="skill"><div class="label"><span>Kubernetes</span><span>70%</span></div><div class="bar"><i data-w="70"></i></div></div>
+      <div class="skill"><div class="label"><span>CI/CD</span><span>80%</span></div><div class="bar"><i data-w="80"></i></div></div>
+      <div class="skill"><div class="label"><span>Observability</span><span>88%</span></div><div class="bar"><i data-w="88"></i></div></div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <h2>// projects</h2>
+    <div class="projgrid fade">
+      <div class="proj">
+        <h3>flowgate</h3>
+        <p>A lightweight event-routing library for fanning out high-volume streams to multiple consumers without a full message-broker dependency.</p>
+        <div class="tags"><span class="tag">go</span><span class="tag">streaming</span></div>
+      </div>
+      <div class="proj">
+        <h3>runbook-cli</h3>
+        <p>Command-line tool that turns a team's markdown runbooks into guided, step-by-step incident checklists right in the terminal.</p>
+        <div class="tags"><span class="tag">python</span><span class="tag">cli</span></div>
+      </div>
+      <div class="proj">
+        <h3>home-lab-scripts</h3>
+        <p>Assorted scripts for self-hosting and home server tinkering. Mostly bash, occasionally regrettable.</p>
+        <div class="tags"><span class="tag">bash</span><span class="tag">homelab</span></div>
+      </div>
+      <div class="proj">
+        <h3>ctf-writeups</h3>
+        <p>Write-ups from CTFs a few of us do on weekends. Mostly web and crypto challenges.</p>
+        <div class="tags"><span class="tag">security</span><span class="tag">notes</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>// contact</h2>
+    <div class="contact-grid fade">
+      <a class="contact-card" href="mailto:P.suresh@gmail.com">
+        <div class="k">Email</div><div class="v">P.suresh@gmail.com</div>
+      </a>
+      <a class="contact-card" href="https://www.linkedin.com/in/priya-suresh-395895448/" target="_blank" rel="noopener">
+        <div class="k">LinkedIn</div><div class="v">in/priya-suresh</div>
+      </a>
+      <a class="contact-card" href="#">
+        <div class="k">GitHub</div><div class="v">psuresh-dev</div>
+      </a>
+      <a class="contact-card" href="#">
+        <div class="k">Location</div><div class="v">Austin, TX</div>
+      </a>
+    </div>
+  </section>
+</div>
+
+<footer class="mono">built with vanilla html/css/js — no framework, no bundler, no regrets</footer>
+
+<script>
+// typing effect
+const phrases = ["Backend Engineer @ LiveCorp", "Python & Go", "Loves a good incident postmortem", "Probably debugging alert noise right now"];
+const typedEl = document.getElementById("typed");
+let pIdx = 0, cIdx = 0, deleting = false;
+function tick(){
+  const current = phrases[pIdx];
+  if(!deleting){
+    cIdx++;
+    typedEl.textContent = current.slice(0, cIdx);
+    if(cIdx === current.length){ deleting = true; setTimeout(tick, 1400); return; }
+  } else {
+    cIdx--;
+    typedEl.textContent = current.slice(0, cIdx);
+    if(cIdx === 0){ deleting = false; pIdx = (pIdx + 1) % phrases.length; }
+  }
+  setTimeout(tick, deleting ? 35 : 55);
+}
+tick();
+
+// fade-in on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add("in"); });
+}, { threshold: 0.15 });
+document.querySelectorAll(".fade").forEach(el => observer.observe(el));
+
+// animate skill bars when visible
+const skillObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      document.querySelectorAll(".bar i").forEach(bar => { bar.style.width = bar.dataset.w + "%"; });
+      skillObserver.disconnect();
+    }
+  });
+}, { threshold: 0.3 });
+const skillSection = document.getElementById("skills");
+if(skillSection) skillObserver.observe(skillSection);
+
+// theme toggle
+const themeBtn = document.getElementById("themeBtn");
+themeBtn.addEventListener("click", () => {
+  const isLight = document.documentElement.getAttribute("data-theme") === "light";
+  if(isLight){
+    document.documentElement.removeAttribute("data-theme");
+    themeBtn.textContent = "☾ dark";
+  } else {
+    document.documentElement.setAttribute("data-theme", "light");
+    themeBtn.textContent = "☀ light";
+  }
+});
+
+// subtle particle background
+const canvas = document.getElementById("bgcanvas");
+const ctx = canvas.getContext("2d");
+function resize(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+resize();
+window.addEventListener("resize", resize);
+const dots = Array.from({length: 46}, () => ({
+  x: Math.random() * window.innerWidth,
+  y: Math.random() * window.innerHeight,
+  vx: (Math.random() - 0.5) * 0.25,
+  vy: (Math.random() - 0.5) * 0.25
+}));
+function draw(){
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const isLight = document.documentElement.getAttribute("data-theme") === "light";
+  ctx.fillStyle = isLight ? "rgba(15,143,107,0.35)" : "rgba(110,231,192,0.35)";
+  ctx.strokeStyle = isLight ? "rgba(15,143,107,0.08)" : "rgba(110,231,192,0.08)";
+  dots.forEach(d => {
+    d.x += d.vx; d.y += d.vy;
+    if(d.x < 0 || d.x > canvas.width) d.vx *= -1;
+    if(d.y < 0 || d.y > canvas.height) d.vy *= -1;
+    ctx.beginPath(); ctx.arc(d.x, d.y, 1.6, 0, Math.PI*2); ctx.fill();
+  });
+  for(let i=0;i<dots.length;i++){
+    for(let j=i+1;j<dots.length;j++){
+      const dx = dots[i].x - dots[j].x, dy = dots[i].y - dots[j].y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if(dist < 120){ ctx.beginPath(); ctx.moveTo(dots[i].x, dots[i].y); ctx.lineTo(dots[j].x, dots[j].y); ctx.stroke(); }
+    }
+  }
+  requestAnimationFrame(draw);
+}
+draw();
+
+// console easter egg
+console.log("%cnice try.", "color:#6ee7c0;font-family:monospace;font-size:14px;");
+console.log("%cnothing hidden in the console, promise.", "color:#8a94a3;font-family:monospace;font-size:11px;");
+</script>
+</body>
+</html>
